@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CrystalKids</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="shortcut icon" href="Estrela cadente com traços coloridos.png" type="image/x-icon">
+  <!-- Fonte Roboto Condensed do Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="font.css">
+
+</head>
+
+<body class="text-gray-800 bg-white roboto-font">
+  <div id="adicionado"
+    class="opacity-0 transition-opacity duration-500 absolute top-5 left-1/2  transform -translate-x-1/2 p-3 bg-white rounded shadow px-4 hidden">
+    Produto
+    adicionado aos Favoritos</div>
+    <div id="jaAdicionado"
+    class="opacity-0 transition-opacity duration-500 absolute top-5 left-1/2  transform -translate-x-1/2 p-3 bg-white rounded shadow px-4 hidden">
+    Produto ja
+    adicionado aos Favoritos</div>
+
+  <!-- Top bar -->
+  <header class="bg-white border-b">
+    <div class="bg-gray-200 text-sm py-1">
+      <div class="flex max-w-7xl mx-auto px-4 justify-end space-x-4 font-semibold">
+        <div class="cursor-pointer" onclick="setIdioma('pt')" aria-label="Selecionar idioma Português">PT</div>
+
+        <div class="cursor-pointer" onclick="setIdioma('en')" aria-label="Selecionar idioma Português">EN</div>
+
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center max-w-7xl mx-auto px-4 py-4">
+      <img width="80px" src="crystal-kids-sem-fundo.png" alt="Logo" />
+      <input type="text" id="pesquisa" placeholder="Buscar por produtos" data-i18n="buscar"
+        class="border-b border-black w-1/2 p-2 text-sm outline-none" />
+      <div class="font-medium cursor-pointer" onclick="toggleSidebar()">
+        <img width="30px" src="menu_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" alt="Menu">
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar Menu -->
+  <div id="sidebar"
+    class="fixed top-0 right-0 w-64 h-full bg-white shadow-lg p-4 z-50 transform translate-x-full transition-transform">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-semibold text-lg ">Menu</h2>
+      <button onclick="toggleSidebar()">Fechar</button>
+    </div>
+    <p class="text-sm">Aqui pode colocar links de conta, pedidos, etc.</p>
+    <hr class="my-4">
+    <h3 class="font-semibold text-lg mb-2">Favoritos</h3>
+    <div id="lista-favoritos" class="space-y-3 text-sm"></div>
+
+  </div>
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40" onclick="toggleSidebar()"></div>
+
+  <!-- Banner -->
+  <div class="h-40 max-w-4xl mx-auto mt-6 bg-cover bg-no-repeat bg-center rounded-3xl border border-black max-md:hidden"
+    style="background-image: url('Untitled Project (2).jpg');"></div>
+  <div class="h-40 w-full md:hidden"><img src="wallpaper.jpg" alt=""></div>
+
+  <!-- Botão de filtro para mobile -->
+  <div class="md:hidden px-4">
+    <button onclick="toggleFiltroMobile()" class="font-bold px-3 py-2 mt-16 border-b w-full text-left"
+      data-i18n="filtros">
+      Filtros
+    </button>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="max-w-7xl mx-auto mt-10 px-4 flex gap-8">
+
+    <!-- Sidebar de Filtros (desktop apenas) -->
+    <aside id="sidebar-filtro" class="w-64 bg-white p-4 rounded-lg shadow hidden md:block">
+      <div class="mb-4">
+        <button onclick="limparFiltros()"
+          class="text-sm border rounded-xl w-full p-3 mb-3 hover:bg-red-500 hover:text-white"
+          data-i18n="limparFiltros">Limpar Filtros</button>
+        <h2 class="text-lg font-bold " data-i18n="filtros">Filtros</h2>
+      </div>
+      <div class="mb-4">
+        <h3 class="font-semibold mb-1" data-i18n="genero" data-i18n="genero">Gênero</h3>
+        <label><input type="checkbox" name="gender" value="M" data-i18n="masculino" /> Masculino</label><br>
+        <label><input type="checkbox" name="gender" value="F" data-i18n="feminino" /> Feminino</label><br>
+      </div>
+      <div class="mb-4">
+        <h3 class="font-semibold mb-1" data-i18n="tamanho">Tamanho</h3>
+        <div class="grid grid-cols-3 gap-1 text-sm" id="tamanhos-container"></div>
+      </div>
+      <div class="mb-4">
+        <h3 class="font-semibold mb-1" data-i18n="preco">Preço</h3>
+        <label><input type="radio" name="price" value="under50" data-i18n="abaixo50" /> Abaixo de R$ 50</label><br>
+        <label><input type="radio" name="price" value="above50" data-i18n="acima50" /> Acima de R$ 50</label><br>
+        <label><input type="radio" name="price" value="" checked data-i18n="todos" /> Todos</label>
+      </div>
+    </aside>
+
+    <!-- Lista de Produtos -->
+    <main class="flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold" data-i18n="produtos">Produtos</h2>
+      </div>
+      <div id="product-list" class="grid grid-cols-3 max-md:grid-cols-2 gap-6"></div>
+    </main>
+  </div>
+
+  <!-- Sidebar Filtro Mobile -->
+  <div id="sidebar-filtro-mobile"
+    class="fixed top-0 right-0 w-72 h-full bg-white shadow-lg p-4 z-50 transform translate-x-full transition-transform md:hidden">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-semibold text-lg" data-i18n="filtros">Filtros</h2>
+      <button onclick="toggleFiltroMobile()" data-i18n="fechar">Fechar</button>
+    </div>
+    <button onclick="limparFiltros()"
+      class="text-sm border rounded-xl w-full p-3 mb-3 hover:bg-red-500 hover:text-white"
+      data-i18n="limparFiltros">Limpar Filtros</button>
+    <div class="mb-4">
+      <h3 class="font-semibold mb-1" data-i18n="genero">Gênero</h3>
+      <label><input type="checkbox" name="gender" value="M" data-i18n="masculino" /> Masculino</label><br>
+      <label><input type="checkbox" name="gender" value="F" data-i18n="feminino" /> Feminino</label><br>
+    </div>
+    <div class="mb-4">
+      <h3 class="font-semibold mb-1" data-i18n="tamanho">Tamanho</h3>
+      <div class="grid grid-cols-3 gap-1 text-sm" id="tamanhos-container-mobile"></div>
+    </div>
+    <div class="mb-4">
+      <h3 class="font-semibold mb-1" data-i18n="preco">Preço</h3>
+      <label><input type="radio" name="price" value="under50" data-i18n="abaixo50" /> Abaixo de R$ 50</label><br>
+      <label><input type="radio" name="price" value="above50" data-i18n="acima50" /> Acima de R$ 50</label><br>
+      <label><input type="radio" name="price" value="" checked data-i18n="todos" /> Todos</label>
+    </div>
+  </div>
+  <div id="overlay-filtro" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40 md:hidden"
+    onclick="toggleFiltroMobile()"></div>
+
+  <!-- Script -->
+  <script>
+
+    const traducoes = {
+      pt: {
+        filtros: "Filtros",
+        limparFiltros: "Limpar Filtros",
+        genero: "Gênero",
+        masculino: "Masculino",
+        feminino: "Feminino",
+        tamanho: "Tamanho",
+        preco: "Preço",
+        abaixo50: "Abaixo de R$ 50",
+        acima50: "Acima de R$ 50",
+        todos: "Todos",
+        produtos: "Produtos",
+        fechar: "Fechar",
+        menu: "Menu",
+        buscar: "Buscar por produtos"
+      },
+      en: {
+        filtros: "Filters",
+        limparFiltros: "Clear Filters",
+        genero: "Gender",
+        masculino: "Male",
+        feminino: "Female",
+        tamanho: "Size",
+        preco: "Price",
+        abaixo50: "Under R$ 50",
+        acima50: "Over R$ 50",
+        todos: "All",
+        produtos: "Products",
+        fechar: "Close",
+        menu: "Menu",
+        buscar: "Search for products"
+      }
+    };
+
+    async function loadProducts() {
+      const res = await fetch("/produtos");
+      const products = await res.json();
+
+      const search = document.getElementById("pesquisa").value.toLowerCase();
+      const selectedSizes = [...document.querySelectorAll('input[name="size"]:checked')].map(cb => cb.value);
+      const selectedGenders = [...document.querySelectorAll('input[name="gender"]:checked')].map(cb => cb.value);
+      const selectedPrice = document.querySelector('input[name="price"]:checked')?.value;
+
+      const filtered = products.filter(prod => {
+        const nameMatch = prod.name.toLowerCase().includes(search);
+        const sizeMatch = selectedSizes.length === 0 ||
+          (Array.isArray(prod.size) ? prod.size.some(s => selectedSizes.includes(s.toString())) : selectedSizes.includes(prod.size));
+        const genderMatch = selectedGenders.length === 0 || selectedGenders.includes(prod.gender);
+        const priceMatch =
+          selectedPrice === "under50" ? prod.price < 50 :
+            selectedPrice === "above50" ? prod.price >= 50 : true;
+
+        return nameMatch && sizeMatch && genderMatch && priceMatch;
+      });
+
+      const productListEl = document.getElementById("product-list");
+      productListEl.innerHTML = "";
+
+      filtered.forEach(prod => {
+        const el = document.createElement("div");
+        el.className = "cursor-pointer mb-3";
+        el.innerHTML = `
+          <div class="aspect-square bg-gradient-to-t from-gray-200 via-gray-100 to-gray-50 flex items-center justify-center overflow-hidden mb-3 relative group">
+            <img style="width:225px; height:225px; display:block; margin:auto;" src="${prod.image}" alt="${prod.name}" class="group" />
+            <div id="favoritos" 
+            class="absolute flex justify-center bottom-0 w-full bg-blue-400 font-semibold opacity-0 translate-y-4  group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out p-2  text-center"
+            onclick="favoritarProduto('${prod.id}', '${prod.name}', '${prod.image}', ${prod.price})">
+            <img class="mr-1" height="15px" width="15px" src="favorite_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            Favoritar
+          </div>
+
+          </div>
+          <h3 class="text-[16px] font-semibold mb-1 truncate">${prod.name}</h3>
+          <div class="flex justify-between h-8 group text-center">
+            <p class=" font-medium">${prod.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+            <div id="comprar" class=" hidden cursor-pointer group-hover:block bg-blue-400 w-8 h-8 flex p-1 transition"
+            onclick="comprarProduto('${encodeURIComponent(prod.name)}')">
+            <img src="shopping_cart_checkout_24dp_EFEFEF_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            </div>
+          </div>
+        `;
+        productListEl.appendChild(el);
+      });
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const isOpen = !sidebar.classList.contains("translate-x-full");
+      sidebar.classList.toggle("translate-x-full");
+      overlay.classList.toggle("hidden", isOpen);
+      if (!isOpen) mostrarFavoritos();
+    }
+
+
+    function toggleFiltroMobile() {
+      const sidebar = document.getElementById("sidebar-filtro-mobile");
+      const overlay = document.getElementById("overlay-filtro");
+      const isOpen = !sidebar.classList.contains("translate-x-full");
+      sidebar.classList.toggle("translate-x-full");
+      overlay.classList.toggle("hidden", isOpen);
+    }
+
+    function limparFiltros() {
+      document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => {
+        el.checked = el.name === "price" && el.value === "";
+      });
+      loadProducts();
+      // Fechar filtros mobile após limpar
+      if (window.innerWidth < 768) toggleFiltroMobile();
+    }
+
+
+    function setIdioma(lang) {
+      const elementos = document.querySelectorAll("[data-i18n]");
+      elementos.forEach(el => {
+        const chave = el.getAttribute("data-i18n");
+        if (traducoes[lang][chave]) {
+          el.innerText = traducoes[lang][chave];
+        }
+      });
+    }
+
+
+    document.getElementById("pesquisa").addEventListener("input", loadProducts);
+    document.addEventListener("change", event => {
+      if (event.target.name === "size" || event.target.name === "gender" || event.target.name === "price") {
+        loadProducts();
+      }
+    });
+
+    const tamanhos = ["PP", "P", "M", "G", "GG", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52"];
+    const container = document.getElementById("tamanhos-container");
+    const containerMobile = document.getElementById("tamanhos-container-mobile");
+    tamanhos.forEach(tam => {
+      const label1 = document.createElement("label");
+      label1.innerHTML = `<input type="checkbox" name="size" value="${tam}" /> ${tam}`;
+      container.appendChild(label1);
+
+      const label2 = document.createElement("label");
+      label2.innerHTML = `<input type="checkbox" name="size" value="${tam}" /> ${tam}`;
+      containerMobile.appendChild(label2);
+    });
+
+    loadProducts();
+
+    function comprarProduto(produto) {
+      const numero = '5584991156739';
+      const mensagem = `Olá! Tenho interesse no produto: ${decodeURIComponent(produto)}`;
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, '_blank');
+    }
+
+    function favoritarProduto(id, name, image, price) {
+      // Recupera os favoritos atuais do localStorage (ou cria array vazio)
+      let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+
+      // Verifica se o produto já está na lista de favoritos
+      const jaExiste = favoritos.some(produto => produto.id === id);
+
+      if (!jaExiste) {
+        // Adiciona o novo produto
+        favoritos.push({ id, name, image, price });
+
+        // Atualiza o localStorage
+        localStorage.setItem('favoritos', JSON.stringify(favoritos));
+
+        const msg = document.getElementById('adicionado');
+
+        msg.classList.remove('hidden');
+        setTimeout(() => {
+          msg.classList.add('opacity-100'); // transição começa aqui
+        }, 10); // pequeno delay para aplicar a transição
+
+        // Ocultar com fade-out após 3 segundos
+        setTimeout(() => {
+          msg.classList.remove('opacity-100');
+          // Depois do fade-out, esconder de novo
+          setTimeout(() => {
+            msg.classList.add('hidden');
+          }, 500); // tempo da transição (igual ao duration-500)
+        }, 1500);
+      } else {
+        const msg = document.getElementById('jaAdicionado');
+
+        msg.classList.remove('hidden');
+        setTimeout(() => {
+          msg.classList.add('opacity-100'); // transição começa aqui
+        }, 10); // pequeno delay para aplicar a transição
+
+        // Ocultar com fade-out após 3 segundos
+        setTimeout(() => {
+          msg.classList.remove('opacity-100');
+          // Depois do fade-out, esconder de novo
+          setTimeout(() => {
+            msg.classList.add('hidden');
+          }, 500); // tempo da transição (igual ao duration-500)
+        }, 1500);
+      }
+    }
+
+
+    function mostrarFavoritos() {
+      const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+      const lista = document.getElementById("lista-favoritos");
+      lista.innerHTML = "";
+
+      if (favoritos.length === 0) {
+        lista.innerHTML = "<p>Nenhum produto favoritado.</p>";
+        return;
+      }
+
+      favoritos.forEach(prod => {
+        const div = document.createElement("div");
+        div.className = "flex items-center gap-2 border-b pb-2";
+        div.innerHTML = `
+      <img src="${prod.image}" alt="${prod.name}" class="w-10 h-10 object-cover rounded">
+      <div class="flex-1 max-w-[35%]">
+        <p class="font-semibold truncate">${prod.name}</p>
+        <p class="text-xs text-gray-600">R$ ${prod.price.toFixed(2)}</p>
+      </div>
+      <div class="ml-3">
+        <button onclick="removerFavorito('${prod.id}')" class="text-red-500 text-sm">Remover</button>
+        <button onclick="comprarProduto('${encodeURIComponent(prod.name)}')" class="text-blue-400 text-sm">Comprar</button>
+      </div>
+    `;
+        lista.appendChild(div);
+      });
+    }
+
+    function removerFavorito(id) {
+      let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+      favoritos = favoritos.filter(prod => prod.id !== id);
+      localStorage.setItem("favoritos", JSON.stringify(favoritos));
+      mostrarFavoritos();
+    }
+
+
+
+  </script>
+
+</body>
+
+</html>

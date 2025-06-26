@@ -1,0 +1,16 @@
+# Ignorar arquivos temporários do sistema
+*.log
+*.tmp
+
+# Ignorar a pasta node_modules (em projetos Node.js)
+node_modules/
+
+# Ignorar arquivos de build
+/dist
+/build
+
+# Ignorar arquivos de configuração local
+.env
+
+# Ignorar arquivos do VSCode
+.vscode/

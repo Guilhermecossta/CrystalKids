@@ -1,0 +1,34 @@
+[
+  {
+    "id": "8b790e87-3eb8-4c42-8eb7-dbaebfbaf00c",
+    "name": "Conjuntinho Carter’s",
+    "price": 45,
+    "size": "PP",
+    "gender": "F",
+    "image": "/uploads/ChatGPT_Image_22_de_jun._de_2025,_21_04_29_1750903929997.png"
+  },
+  {
+    "id": "333ce5c5-4a6d-42dc-933e-03f230a39af4",
+    "name": "Camisa junina ",
+    "price": 25,
+    "size": "M",
+    "gender": "M",
+    "image": "/uploads/ChatGPT_Image_8_de_jun._de_2025,_19_31_57_1750904169738.png"
+  },
+  {
+    "id": "def2171e-1974-4929-a676-daa05e9a5b4b",
+    "name": "Camisa junina ",
+    "price": 25,
+    "size": "PP",
+    "gender": "F",
+    "image": "/uploads/Vestido_Infantil_Colorido_e_Charmoso_(1)_1750904670503.png"
+  },
+  {
+    "id": "6046845b-4467-4d5f-ab36-c5d5176b816d",
+    "name": "Camisa junina ",
+    "price": 25,
+    "size": "G",
+    "gender": "M",
+    "image": "/uploads/ChatGPT_Image_8_de_jun._de_2025,_19_28_20_1750906037227.png"
+  }
+]
