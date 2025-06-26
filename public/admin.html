@@ -7,9 +7,10 @@
   <title>Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="shortcut icon" href="Estrela cadente com traços coloridos.png" type="image/x-icon">
+    <link rel="stylesheet" href="font.css">
 </head>
 
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 text-gray-800 roboto-font">
   <div id="adicionado"
     class="opacity-0 transition-opacity duration-500 absolute top-5 left-1/2  transform -translate-x-1/2 p-3 bg-white rounded shadow px-4 hidden">
     Produto adicionado</div>
@@ -36,10 +37,10 @@
 
   <section class="mb-8">
     <h2
-      class="text-xl font-semibold mb-2 text-center max-w-[50%] max-[400px]:max-w-[90%] bg-white m-auto border shadow p-3">
+      class="text-xl font-semibold mb-2 text-center max-w-[50%] max-[500px]:max-w-[90%] bg-white m-auto border shadow p-3">
       Adicionar Produto</h2>
     <form id="product-form" enctype="multipart/form-data"
-      class="bg-white p-4 rounded shadow max-w-[50%] max-[400px]:max-w-[90%] m-auto grid grid-cols-2 gap-3">
+      class="bg-white p-4 rounded shadow max-w-[50%] max-[500px]:max-w-[90%] m-auto grid grid-cols-2 gap-3">
       <label class="block mb-2">
         <input type="text" name="name" class="border p-2 w-full rounded h-11" required placeholder="Nome" />
       </label>
@@ -80,9 +81,9 @@
     </form>
   </section>
 
-  <section class="p-5 bg-white max-w-[50%] max-[400px]:max-w-[90%] m-auto max-h-[70vh] overflow-auto mb-10">
+  <section class="p-5 bg-white max-w-[50%] max-[500px]:max-w-[90%] m-auto max-h-[70vh] overflow-auto mb-10">
     <h2 class="text-xl font-semibold mb-4 text-center">Produtos Cadastrados</h2>
-    <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+    <div id="product-list" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </section>
 
 
@@ -119,11 +120,12 @@
         const el = document.createElement("div");
         el.className = "bg-white p-4 rounded shadow relative w-full sm:w-auto";
         el.innerHTML = `
+          <img  src="${prod.image}" class="group w-60 h-60 max-[500px]:w-20 max-[500px]:h-20 block m-auto" /
           <img src="${prod.image}" class="w-full h-32 sm:h-48 object-cover rounded mb-3" />
           <h3 class="text-lg font-semibold">${prod.name}</h3>
           <p class="mb-1">${prod.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-          <p class="mb-1"><strong>Tamanho:</strong> ${prod.size}</p>
-          <p class="mb-3"><strong>Gênero:</strong> ${prod.gender === 'M' ? 'Masculino' : 'Feminino'}</p>
+          <p class="mb-1"><strong>Tam:</strong> ${prod.size}</p>
+          <p class="mb-3"><strong>Gên:</strong> ${prod.gender === 'M' ? 'Masculino' : 'Feminino'}</p>
           <button data-index="${index}" class="delete-btn bg-red-600 text-white px-3 py-1 rounded absolute top-2 right-2 hover:bg-red-700">Excluir</button>
         `;
         productListEl.appendChild(el);
