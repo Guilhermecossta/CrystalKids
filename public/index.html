@@ -40,7 +40,7 @@
     <div class="flex justify-between items-center max-w-7xl mx-auto px-4 py-4">
       <img width="80px" src="crystal-kids-sem-fundo.png" alt="Logo" />
       <input type="text" id="pesquisa" placeholder="Buscar por produtos" data-i18n="buscar"
-        class="border-b border-black w-1/2 p-2 text-sm outline-none" />
+        class="border-b border-black w-1/2 p-2 text-sm outline-none rounded-none" />
       <div class="font-medium cursor-pointer" onclick="toggleSidebar()">
         <img width="30px" src="menu_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" alt="Menu">
       </div>
@@ -69,7 +69,7 @@
 
   <!-- Botão de filtro para mobile -->
   <div class="md:hidden px-4">
-    <button onclick="toggleFiltroMobile()" class="font-bold px-3 py-2 mt-16 border-b w-full text-left"
+    <button onclick="toggleFiltroMobile()" class="font-bold px-3 py-2 mt-16 border-b w-full text-left text-shadow-xl"
       data-i18n="filtros">
       Filtros
     </button>
@@ -105,7 +105,7 @@
 
     <!-- Lista de Produtos -->
     <main class="flex-1">
-      <div class="flex justify-between items-center mb-6">
+      <div class="flex justify-between items-center mb-10">
         <h2 class="text-xl font-semibold" data-i18n="produtos">Produtos</h2>
       </div>
       <div id="product-list" class="grid grid-cols-3 max-md:grid-cols-2 gap-6"></div>
@@ -140,6 +140,28 @@
   </div>
   <div id="overlay-filtro" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40 md:hidden"
     onclick="toggleFiltroMobile()"></div>
+
+  <footer class="mt-10">
+    <div class="w-full h-10 bg-gray-600 text-white px-10 flex justify-center items-center">CrystalKids</div>
+    <div class="grid grid-cols-2">
+      <div class="p-5 border-l border">
+        <h1 class="text-2xl">Informações</h1>
+        <ul>
+          <li>Devolução</li>
+          <li>Troca</li>
+          <li>Sobre</li>
+        </ul>
+      </div>
+      <div class="p-5">
+        <h1 class="text-2xl">Contatos</h1>
+        <ul>
+          <li>WhatsApp: </li>
+          <li>Instagram: </li>
+          <li>Email: </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 
   <!-- Script -->
   <script>
@@ -208,9 +230,14 @@
         el.className = "cursor-pointer mb-3";
         el.innerHTML = `
           <div class="aspect-square bg-gradient-to-t from-gray-200 via-gray-100 to-gray-50 flex items-center justify-center overflow-hidden mb-3 relative group">
+            <div id="favoritos"
+            class="absolute top-1 right-1 hidden max-[500px]:block"
+            onclick="favoritarProduto('${prod.id}', '${prod.name}', '${prod.image}', ${prod.price})">
+              <img src="favorite_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            </div>
             <img  src="${prod.image}" alt="${prod.name}" class="group w-60 h-60 max-[500px]:w-40 max-[500px]:h-40" />
             <div id="favoritos" 
-            class="absolute flex justify-center bottom-0 w-full bg-blue-400 font-semibold opacity-0 translate-y-4  group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out p-2  text-center"
+            class="absolute flex justify-center bottom-0 w-full bg-blue-400 font-semibold opacity-0 translate-y-4  group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out p-2  text-center max-[500px]:hidden"
             onclick="favoritarProduto('${prod.id}', '${prod.name}', '${prod.image}', ${prod.price})">
             <img class="mr-1" height="15px" width="15px" src="favorite_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="">
             Favoritar
@@ -220,9 +247,10 @@
           <h3 class="text-[16px] font-semibold mb-1 truncate">${prod.name}</h3>
           <div class="flex justify-between h-8 group text-center relative">
             <p class=" font-medium">${prod.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-            <div id="comprar" class="p-1 absolute flex justify-center bottom-3 right-0 w-7 h-7 bg-blue-400 font-semibold opacity-0 translate-y-4  group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out"
+            <div id="comprar" class="p-1 absolute flex justify-center bottom-3 right-0 w-7 h-7 bg-blue-400 font-semibold opacity-0 translate-y-4  group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300 ease-out max-[500px]:opacity-100 max-[500px]:translate-y-1 max-[500px]:bg-white"
             onclick="comprarProduto('${encodeURIComponent(prod.name)}')">
-            <img src="shopping_cart_checkout_24dp_EFEFEF_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            <img src="shopping_cart_checkout_24dp_EFEFEF_FILL0_wght400_GRAD0_opsz24.svg" alt="" class="max-[500px]:hidden">
+            <img src="shopping_cart_checkout_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="" class="hidden max-[500px]:block">
             </div>
           </div>
         `;
@@ -348,37 +376,37 @@
 
 
     function mostrarFavoritos() {
-      const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-      const lista = document.getElementById("lista-favoritos");
-      lista.innerHTML = "";
+      const favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+      const container = document.getElementById('lista-favoritos');
+      container.innerHTML = '';
 
       if (favoritos.length === 0) {
-        lista.innerHTML = "<p>Nenhum produto favoritado.</p>";
+        container.innerHTML = '<p>Nenhum produto favoritado.</p>';
         return;
       }
 
       favoritos.forEach(prod => {
-        const div = document.createElement("div");
-        div.className = "flex items-center gap-2 border-b pb-2";
-        div.innerHTML = `
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-2 border-b pb-2';
+        item.innerHTML = `
       <img src="${prod.image}" alt="${prod.name}" class="w-10 h-10 object-cover rounded">
       <div class="flex-1 max-w-[35%]">
         <p class="font-semibold truncate">${prod.name}</p>
-        <p class="text-xs text-gray-600">R$ ${prod.price.toFixed(2)}</p>
+        <p class="text-xs text-gray-500">${Number(prod.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
       </div>
       <div class="ml-3">
         <button onclick="removerFavorito('${prod.id}')" class="text-red-500 text-sm">Remover</button>
         <button onclick="comprarProduto('${encodeURIComponent(prod.name)}')" class="text-blue-400 text-sm">Comprar</button>
       </div>
     `;
-        lista.appendChild(div);
+        container.appendChild(item);
       });
     }
 
     function removerFavorito(id) {
-      let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+      let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
       favoritos = favoritos.filter(prod => prod.id !== id);
-      localStorage.setItem("favoritos", JSON.stringify(favoritos));
+      localStorage.setItem('favoritos', JSON.stringify(favoritos));
       mostrarFavoritos();
     }
 
